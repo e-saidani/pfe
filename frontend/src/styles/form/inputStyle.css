@@ -1,0 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+input{
+    border: 0.5px rgba(9, 9, 9, 0.23) solid;
+    font-size: small;
+}

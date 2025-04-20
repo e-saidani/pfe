@@ -1,0 +1,77 @@
+.signin{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    
+
+}
+
+
+.form {
+    position: relative;
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.form .header{
+    margin-bottom: 28px;
+}
+form{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+form Button{
+    margin-top: 10px;
+}
+
+.cardV2{
+    position: relative;
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(240, 250, 255);
+    
+}
+
+.girl{
+    width: 500px;
+    
+}
+.grid{
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+@media (max-width: 768px) {
+  .cardV2 {
+    display: none;
+  }
+  .signin{
+    align-items: center;
+    justify-content: center;
+  }
+  .form{
+    position: relative;
+    width: 80%;
+  }
+
+}
+
+@media (max-width: 360px) {
+    .heading{
+        width: 17rem;
+    }
+}
+@media (max-width: 330px) {
+    .heading{
+        width: 15rem;
+    }
+}

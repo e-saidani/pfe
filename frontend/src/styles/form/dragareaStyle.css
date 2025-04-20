@@ -1,0 +1,26 @@
+.drag-area:hover{
+    border-color: #465FFF;
+}
+.url{
+   color: #465FFF; 
+}
+
+.image-loader img{
+    
+    border-radius: 5%;
+}
+.container .delete {
+    position: absolute;
+    top: -2px;
+    right: 9px;
+    font-size: 20px;
+    cursor: pointer;
+    z-index: 1;
+    color: #080808a9;
+}
+
+.image-loader input,
+.drag-area .on-drop,
+.drag-area.dragover .visible {
+    display: none;
+}
