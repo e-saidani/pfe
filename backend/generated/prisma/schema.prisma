@@ -1,0 +1,133 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Status {
+  ACTIVE
+  INACTIVE
+}
+
+model Users {
+  id              Int        @id @default(autoincrement()) @map("user_id")
+  firstName       String     @map("first_name") @db.VarChar(45)
+  lastName        String     @map("last_name") @db.VarChar(45)
+  fullName        String?    @map("full_name") @db.VarChar(100)
+  image           String?    @db.Text
+  email           String?    @unique @db.VarChar(100)
+  phone           String?    @unique @db.VarChar(20)
+  departementCode String?    @map("departement_code") @db.VarChar(3)
+  departementName String?    @map("departement_name") @db.VarChar(22)
+  siret           String?    @unique @db.VarChar(14)
+  societyName     String?    @map("society_name") @db.VarChar(100)
+  logo            String?    @db.Text
+  userStatus      Status     @default(ACTIVE) @map("user_status")
+  createdAt       DateTime   @default(now()) @map("created_at")
+  updatedAt       DateTime   @updatedAt @map("updated_at")
+  accounts        Accounts[]
+
+  @@map("users")
+}
+
+enum Role {
+  ADMIN
+  AGENT
+  COMMERCIAL
+  SUPERVISOR
+  CLIENT
+}
+
+model Accounts {
+  id            Int             @id @default(autoincrement()) @map("account_id")
+  username      String          @unique @db.VarChar(45)
+  password      String          @db.Text
+  role          Role
+  status        Status          @default(ACTIVE)
+  createdAt     DateTime        @default(now()) @map("created_at")
+  updatedAt     DateTime        @updatedAt @map("updated_at")
+  userId        Int             @map("user_id")
+  user          Users           @relation(fields: [userId], references: [id])
+  Team          Team[]
+  Appointments  Appointments[]
+  Disponibility Disponibility[]
+
+  @@map("accounts")
+}
+
+model Disponibility {
+  id            Int      @id @default(autoincrement()) @map("disponibility_id")
+  accountId     Int      @map("account_id")
+  availableFrom DateTime @map("available_from") // e.g., start time of availability
+  availableTo   DateTime @map("available_to") // e.g., end time of availability
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+  account       Accounts @relation(fields: [accountId], references: [id])
+
+  @@map("disponibilities")
+}
+
+model Products {
+  id                 Int    @id @default(autoincrement()) @map("product_id")
+  productName        String @map("product_name") @db.VarChar(100)
+  productLogo        String @map("product_logo") @db.Text
+  productDescription String @map("product_description") @db.Text
+
+  @@map("products")
+}
+
+model Team {
+  id       Int      @id @default(autoincrement()) @map("team_id")
+  leaderId Int      @map("leader_id")
+  account  Accounts @relation(fields: [leaderId], references: [id])
+
+  @@map("team")
+}
+
+enum Gender {
+  MALE
+  FEMALE
+}
+
+model Prospects {
+  id           Int            @id @default(autoincrement()) @map("prospect_id")
+  fullName     String         @map("full_name") @db.VarChar(100)
+  gender       Gender
+  AgeRange     String         @map("age_range") @db.VarChar(20)
+  situation    String         @db.Text
+  address      String         @db.Text
+  city         String         @db.Text
+  postalCode   String         @map("postal_code") @db.VarChar(10)
+  phone        String         @db.Text
+  landline     String         @map("landline") @db.Text
+  Appointments Appointments[]
+
+  @@map("prospects")
+}
+
+enum StatusAppointment {
+  PENDING
+  CONFIRMED
+  CANCELED
+  SUCCESS
+  FAILURE
+}
+
+model Appointments {
+  id           Int               @id @default(autoincrement()) @map("appointment_id")
+  startDate    DateTime          @map("start_date")
+  endDate      DateTime          @map("end_date")
+  callRecord   String            @map("call_record") @db.Text
+  createdBy    Int               @map("created_by")
+  createdAt    DateTime          @default(now()) @map("created_at")
+  updatedAt    DateTime          @updatedAt @map("updated_at")
+  prospectId   Int               @map("prospect_id")
+  commercialId Int               @map("commercial_id")
+  status       StatusAppointment @default(PENDING) @map("status_appointment")
+  prospect     Prospects         @relation(fields: [prospectId], references: [id])
+  account      Accounts          @relation(fields: [createdBy], references: [id])
+}
